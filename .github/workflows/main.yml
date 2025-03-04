@@ -1,0 +1,23 @@
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['windows-latest']
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.13
+
+    - name: Install dependencies
+      run: pip install pyinstaller
+    - name: Build
+      run: pyinstaller --noconsole --onefile gui_test.py
+    - name: Release
+      uses: softprops/action-gh-release@v2
